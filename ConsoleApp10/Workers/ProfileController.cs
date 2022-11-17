@@ -48,7 +48,7 @@ namespace CloudBackend.Workers
             public string favorite_callingcard { get; set; } = Data.Saved.favorite_callingcard;
             public string favorite_character { get; set; } = Data.Saved.favorite_character;
             public string[] favorite_spray { get; set; } = Data.Saved.favorite_spray;
-            public string favorite_loadingscreen { get; set; } = "";
+            public string favorite_loadingscreen { get; set; } = Data.Saved.favorite_loadingscreen;
             public string favorite_hat { get; set; } = Data.Saved.favorite_hat;
             public string favorite_battlebus { get; set; } = Data.Saved.favorite_battlebus;
             public string favorite_mapmarker { get; set; } = Data.Saved.favorite_mapmarker;
@@ -344,6 +344,7 @@ namespace CloudBackend.Workers
         {
             public string slotName { get; set; }
             public string itemToSlot { get; set; }
+            public int slotIndex { get; set; }
         }
 
         //http://localhost:6980/fortnite/api/game/v2/profile/ABCABC/client/EquipBattleRoyaleCustomization
@@ -355,13 +356,47 @@ namespace CloudBackend.Workers
             {
                 if (body.slotName == "ItemWrap" || body.slotName == "Dance")
                 {
-                    if (body.itemToSlot == "")
+                    var NumOfItems = body.slotName == "Dance" ? 6 : 7;
+                    if (body.slotIndex == -1)
                     {
+                        for (var i = 0; i < NumOfItems; i++)
+                        {
+                            if (body.itemToSlot.Split(":")[0] == "AthenaDance")
+                            {
+                                Data.Saved.favorite_dance[i] = body.itemToSlot;
+                            }
+                            else
+                            {
+                                Data.Saved.favorite_itemwraps[i] = body.itemToSlot;
+                            }
+                        }
                     }
                     else
                     {
-
+                        if (body.itemToSlot == "")
+                        {
+                            if (body.itemToSlot.Split(":")[0] == "AthenaDance")
+                            {
+                                Data.Saved.favorite_dance[body.slotIndex] = "";
+                            }
+                            else
+                            {
+                                Data.Saved.favorite_itemwraps[body.slotIndex] = "";
+                            }
+                        }
+                        else
+                        {
+                            if (body.itemToSlot.Split(":")[0] == "AthenaDance")
+                            {
+                                Data.Saved.favorite_dance[body.slotIndex] = body.itemToSlot;
+                            }
+                            else
+                            {
+                                Data.Saved.favorite_itemwraps[body.slotIndex] = body.itemToSlot;
+                            }
+                        }
                     }
+
                 }
                 else
                 {
