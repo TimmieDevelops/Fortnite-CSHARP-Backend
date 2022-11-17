@@ -1,12 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using static CloudBackend.Errors.NotFound;
 using static CloudBackend.Workers.LightswitchController;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CloudBackend.Workers
 {
@@ -14,6 +19,7 @@ namespace CloudBackend.Workers
     [ApiController]
     public class TimelineController : ControllerBase
     {
+       
         public class emptyyk
         {
 
@@ -40,11 +46,27 @@ namespace CloudBackend.Workers
         }
         public class clienteventactiveevents
         {
-            
+            public string eventType { get; set; } = $"EventFlag.LobbySeason{Data.Saved.FortniteSeasonYK}";
+            public string activeUntil { get; set; } = "9999-12-31T23:59:59.999Z";
+            public string activeSince { get; set; } = "2022-11-14T17:45:26.845Z";
         }
         public class clienteventactivestate
         {
-
+            public string[] activeStorefronts { get; set;} = new string[0];
+            public emptyyk eventNamedWeights { get; set; } = new emptyyk();
+            public int seasonNumber { get; set; } = Data.Saved.FortniteSeasonYK;
+            public string seasonTemplateId { get; set; } = $"AthenaSeason:athenaseason{Data.Saved.FortniteSeasonYK}";
+            public int matchXpBonusPoints { get; set; } = 0;
+            public string eventPunchCardTemplateId { get; set; } = "";
+            public string seasonBegin { get; set; } = "9999-12-31T23:59:59.999Z";
+            public string seasonEnd { get; set; } = "9999-12-31T23:59:59.999Z";
+            public string seasonDisplayedEnd { get; set; } = "9999-12-31T23:59:59.999Z";
+            public string weeklyStoreEnd { get; set; } = "9999-12-31T23:59:59.999Z";
+            public string dailyStoreEnd { get; set; } = "9999-12-31T23:59:59.999Z";
+            public string stwDailyStoreEnd { get; set; } = "9999-12-31T23:59:59.999Z";
+            public string stwEventStoreEnd { get; set; } = "9999-12-31T23:59:59.999Z";
+            public string stwWeeklyStoreEnd { get; set; } = "9999-12-31T23:59:59.999Z";
+            public emptyyk sectionStoreEnds { get; set; } =  new emptyyk();
         }
         public class clienteventstates
         {
@@ -80,6 +102,35 @@ namespace CloudBackend.Workers
 
         public ActionResult<omg6923459343> Timeline()
         {
+            string UserAgent = HttpContext.Request.Headers["User-Agent"];
+            if (string.IsNullOrEmpty(UserAgent) || !UserAgent.Contains("Fortnite"))
+            {
+                Data.Saved.FortniteSeasonYK = 1;
+            }
+            else
+            {
+                try
+                {
+                    UserAgent = UserAgent.Split("-", StringSplitOptions.None)[1].Split(".")[0];
+                    if (UserAgent == "Next" || UserAgent == "Cert" || UserAgent.Contains("+++Fortnite+Release"))
+                    {
+                        Data.Saved.FortniteSeasonYK = 2;
+                    }
+                    else
+                    {
+                        Data.Saved.FortniteSeasonYK = Int32.Parse(UserAgent);
+                        Console.WriteLine(UserAgent);
+                    }
+                    Console.WriteLine(UserAgent);
+
+                }
+                catch
+                {
+                    Data.Saved.FortniteSeasonYK = 1;
+                }
+            }
+            
+
             return new omg6923459343();
         }
     }

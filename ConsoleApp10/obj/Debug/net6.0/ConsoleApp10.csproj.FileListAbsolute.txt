@@ -50,3 +50,6 @@ C:\Users\Zinx\source\repos\ConsoleApp10\ConsoleApp10\obj\Debug\net6.0\refint\Clo
 C:\Users\Zinx\source\repos\ConsoleApp10\ConsoleApp10\obj\Debug\net6.0\CloudBackend.pdb
 C:\Users\Zinx\source\repos\ConsoleApp10\ConsoleApp10\obj\Debug\net6.0\ref\CloudBackend.dll
 C:\Users\Zinx\source\repos\ConsoleApp10\ConsoleApp10\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\Zinx\source\repos\ConsoleApp10\ConsoleApp10\bin\Debug\net6.0\resources\ini\DefaultGame.ini
+C:\Users\Zinx\source\repos\ConsoleApp10\ConsoleApp10\bin\Debug\net6.0\resources\ini\DefaultEngine.ini
+C:\Users\Zinx\source\repos\ConsoleApp10\ConsoleApp10\bin\Debug\net6.0\resources\json\athena.json

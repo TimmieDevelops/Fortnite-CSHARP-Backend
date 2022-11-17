@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static CloudBackend.Workers.LightswitchController;
 
 namespace CloudBackend.Workers
 {
@@ -13,7 +14,6 @@ namespace CloudBackend.Workers
     [ApiController]
     public class LightswitchController : ControllerBase
     {
-        public static string serviceIdOmg = "Fortnite";
         public class launcherInfoDTO
         {
             public string appName { get; set; } = "Fortnite";
@@ -24,24 +24,24 @@ namespace CloudBackend.Workers
         }
         public class LightswitchStatus
         {
-            public string serviceInstanceId { get; set; } = serviceIdOmg;
+            public string serviceInstanceId { get; set; } = Data.Saved.serviceIdOmg;
             public string status { get; set; } = "UP";
             public string message { get; set; } = "servers up.";
             public string maintenanceUri { get; set; } = "https://ohno.com";
-            public string[] overrideCatalogIds { get; set; } = new string[1] {"a7f138b2e51945ffbfdacc1af0541053"};
-            public string[] allowedActions { get; set; } = new string[2] {"PLAY", "DOWNLOAD"};
+            public string[] overrideCatalogIds { get; set; } = new string[1] { "a7f138b2e51945ffbfdacc1af0541053" };
+            public string[] allowedActions { get; set; } = new string[2] { "PLAY", "DOWNLOAD" };
             public bool banned { get; set; } = false;
             public launcherInfoDTO launcherInfoDTO { get; set; } = new launcherInfoDTO();
         }
         public ActionResult<List<LightswitchStatus>> GetLightswitchStatus([FromQuery] string serviceId)
         {
-            if(serviceId == null)
+            if (serviceId == null)
             {
-                serviceIdOmg = "Fortnite".ToLower();
+                Data.Saved.serviceIdOmg = "Fortnite".ToLower();
             }
             else
             {
-                serviceIdOmg = serviceId.ToLower();
+                Data.Saved.serviceIdOmg = serviceId.ToLower();
             }
             return new List<LightswitchStatus>
             {
@@ -49,4 +49,14 @@ namespace CloudBackend.Workers
             };
         }
     }
+    [Route("/waitingroom/api/waitingroom")]
+    public class WaitingRoom : ControllerBase
+    {
+        public ActionResult WaitingRoomE()
+        {
+            this.NoContent();
+            return this.StatusCode(204);
+        }
+    }
+    
 }

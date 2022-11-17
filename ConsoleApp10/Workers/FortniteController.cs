@@ -21,7 +21,7 @@ namespace CloudBackend.Workers
         [HttpPost("game/v2/grant_access/{ohno}")]
         public ActionResult grant_access(string ohno)
         {
-            HttpContext.Response.StatusCode = 204;
+            this.StatusCode(204);
             return this.Content("{}");
         }
 
