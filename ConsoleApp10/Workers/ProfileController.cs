@@ -344,7 +344,8 @@ namespace CloudBackend.Workers
         {
             public string slotName { get; set; }
             public string itemToSlot { get; set; }
-            public int slotIndex { get; set; }
+            public int indexWithinSlot { get; set; }
+            public string category { get; set; }
         }
 
         //http://localhost:6980/fortnite/api/game/v2/profile/ABCABC/client/EquipBattleRoyaleCustomization
@@ -357,7 +358,7 @@ namespace CloudBackend.Workers
                 if (body.slotName == "ItemWrap" || body.slotName == "Dance")
                 {
                     var NumOfItems = body.slotName == "Dance" ? 6 : 7;
-                    if (body.slotIndex == -1)
+                    if (body.indexWithinSlot == -1)
                     {
                         for (var i = 0; i < NumOfItems; i++)
                         {
@@ -375,58 +376,62 @@ namespace CloudBackend.Workers
                     {
                         if (body.itemToSlot == "")
                         {
-                            if (body.itemToSlot.Split(":")[0] == "AthenaDance")
+                            if (body.slotName.ToLower() == "dance")
                             {
-                                Data.Saved.favorite_dance[body.slotIndex] = "";
+                                Data.Saved.favorite_dance[body.indexWithinSlot] = "";
                             }
                             else
                             {
-                                Data.Saved.favorite_itemwraps[body.slotIndex] = "";
+                                Data.Saved.favorite_itemwraps[body.indexWithinSlot] = "";
                             }
                         }
                         else
                         {
                             if (body.itemToSlot.Split(":")[0] == "AthenaDance")
                             {
-                                Data.Saved.favorite_dance[body.slotIndex] = body.itemToSlot;
+                                Console.WriteLine("E", body.indexWithinSlot);
+                                Data.Saved.favorite_dance[body.indexWithinSlot] = body.itemToSlot;
                             }
                             else
                             {
-                                Data.Saved.favorite_itemwraps[body.slotIndex] = body.itemToSlot;
+                                Data.Saved.favorite_itemwraps[body.indexWithinSlot] = body.itemToSlot;
                             }
                         }
                     }
 
                 }
                 else
-                {
+                { 
+                    Console.WriteLine("E", body.itemToSlot);
                     if (body.itemToSlot == "")
                     {
-                        if (body.itemToSlot.Split(":")[0] == "AthenaCharacter")
+                        Console.WriteLine("TEST");
+                        Console.WriteLine(body.slotName);
+                        if (body.slotName.ToLower() == "character")
                         {
                             Data.Saved.favorite_character = "";
                         }
-                        else if (body.itemToSlot.Split(":")[0] == "AthenaBackpack")
+                        else if (body.slotName.ToLower() == "backpack")
                         {
                             Data.Saved.favorite_backpack = "";
                         }
-                        else if (body.itemToSlot.Split(":")[0] == "AthenaPickaxe")
+                        else if (body.slotName.ToLower() == "pickaxe")
                         {
                             Data.Saved.favorite_pickaxe = "";
                         }
-                        else if (body.itemToSlot.Split(":")[0] == "AthenaGlider")
+                        else if (body.slotName.ToLower() == "glider")
                         {
                             Data.Saved.favorite_glider = "";
                         }
-                        else if (body.itemToSlot.Split(":")[0] == "AthenaSkyDiveContrail")
+                        else if (body.slotName.ToLower() == "skydivecontrail")
                         {
                             Data.Saved.favorite_skydivecontrail = "";
                         }
-                        else if (body.itemToSlot.Split(":")[0] == "AthenaMusicPack")
+                        else if (body.slotName.ToLower() == "musicpack")
                         {
                             Data.Saved.favorite_musicpack = "";
                         }
-                        else if (body.itemToSlot.Split(":")[0] == "AthenaLoadingScreen")
+                        else if (body.slotName.ToLower() == "loadingscreen")
                         {
                             Data.Saved.favorite_loadingscreen = "";
                         }
