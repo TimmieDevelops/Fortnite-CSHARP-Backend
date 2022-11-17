@@ -5,6 +5,7 @@ using System.Collections;
 using System.Net.Mime;
 using System.IO;
 using System;
+using CloudBackend.Models.CloudStorage;
 
 namespace CloudBackend.Workers
 {
@@ -12,26 +13,12 @@ namespace CloudBackend.Workers
     [ApiController]
     public class CloudStorageController: ControllerBase
     {
-
-        public class DefaultGamdecloudstoragesystemodule
-        {
-            public string uniqueFilename { get; set; }
-            public string filename { get; set; }
-            public string hash { get; set; }
-            public string hash256 { get; set; }
-            public long length { get; set; }
-            public string contentType { get; set; }
-            public string uploaded { get; set; }
-            public string storageType { get; set; }
-            public bool doNotCache { get; set; }
-        }
-   
         [HttpGet("cloudstorage/system")]
-        public ActionResult<List<DefaultGamdecloudstoragesystemodule>> cloudstoragesystem(string ohno)
+        public ActionResult<List<CloudStorageSystemModule>> cloudstoragesystem(string ohno)
         {
-            return new List<DefaultGamdecloudstoragesystemodule>
+            return new List<CloudStorageSystemModule>
             {
-               new DefaultGamdecloudstoragesystemodule() {
+               new CloudStorageSystemModule() {
                    uniqueFilename = "DefaultGame.ini",
                    filename = "DefaultGame.ini",
                    hash = "603E6907398C7E74E25C0AE8EC3A03FFAC7C9BB4",
@@ -42,7 +29,7 @@ namespace CloudBackend.Workers
                    storageType = "S3",
                    doNotCache = false
                },
-               new DefaultGamdecloudstoragesystemodule() { 
+               new CloudStorageSystemModule() { 
                    uniqueFilename = "DefaultEngine.ini", 
                    filename = "DefaultEngine.ini",
                    hash = "603E6907398C7E74E25C0AE8EC3A03FFAC7C9BB4",

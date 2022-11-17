@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CloudBackend.Models.Profile;
+using CloudBackend.Models.Profile.Changes;
+using CloudBackend.Models.Profile.Equip;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -22,110 +25,15 @@ namespace CloudBackend.Workers
     public class ProfileController : ControllerBase
     {
         public static string profileIdOMG = "athena";
-        public class QueryProfileModels
-        {
-            public int profileRevision { get; set; } = 1;
-            public string profileId { get; set; } = profileIdOMG;
-            public int profileChangesBaseRevision { get; set; } = 1;
-            public string[] profileChanges { get; set; } = new string[0];
-            public string serverTime { get; set; } = DateTime.Now.ToString("yyyy-MM-ddThh-mm-ssZ");
-            public int profileCommandRevision { get; set; } = 1;
-            public int responseVersion { get; set; } = 1;
-        }
-        public class attributes69
-        {
-            public string[] past_seasons { get; set; } = new string[0];
-            public int season_match_boost { get; set; } = 999999999;
-            public string[] loadouts { get; set; } = new string[2] { "sandbox_loadout", "loadout_1" };
-            public string favorite_victorypose { get; set; } = "";
-            public bool mfa_reward_claimed { get; set; } = false;
-            public int book_level { get; set; } = 70;
-            public int season_num { get; set; } = 2;
-            public string favorite_consumableemote { get; set; } = "";
-            public int book_xp { get; set; } = 100;
-            public bool book_purchased { get; set; } = false; // or you will maybe get stw
-            public int lifetime_wins { get; set; } = 100;
-            public string favorite_callingcard { get; set; } = Data.Saved.favorite_callingcard;
-            public string favorite_character { get; set; } = Data.Saved.favorite_character;
-            public string[] favorite_spray { get; set; } = Data.Saved.favorite_spray;
-            public string favorite_loadingscreen { get; set; } = Data.Saved.favorite_loadingscreen;
-            public string favorite_hat { get; set; } = Data.Saved.favorite_hat;
-            public string favorite_battlebus { get; set; } = Data.Saved.favorite_battlebus;
-            public string favorite_mapmarker { get; set; } = Data.Saved.favorite_mapmarker;
-            public string favorite_vehicledeco { get; set; } = Data.Saved.favorite_vehicledeco;
-            public int accountLevel { get; set; } = 100;
-            public string favorite_backpack { get; set; } = Data.Saved.favorite_backpack;
-            public int inventory_limit_bonus { get; set; } = 0;
-            public string last_applied_loadout { get; set; } = "";
-            public string ast_applied_loadout { get; set; } = "sandbox_loadout";
-            public string favorite_skydivecontrail { get; set; } = Data.Saved.favorite_skydivecontrail;
-            public string favorite_pickaxe { get; set; } = Data.Saved.favorite_pickaxe;
-            public string favorite_glider { get; set; } = Data.Saved.favorite_glider;
-            public int xp { get; set; } = 999;
-            public int season_friend_match_boost { get; set; } = 999999999;
-            public int intactive_loadout_index { get; set; } = 0;
-            public string favorite_musicpack { get; set; } = Data.Saved.favorite_musicpack;
-            public string banner_color { get; set; } = Data.Saved.banner_color;
-            public string banner_icon { get; set; } = Data.Saved.banner_icon;
-            public string[] favorite_dance { get; set; } = Data.Saved.favorite_dance;
-            public string[] favorite_itemwraps { get; set; } = Data.Saved.favorite_itemwraps;
-        }
-        public class fdsfsdsddffsd
-        {
-            public attributes69 attributes { get; set; }
-        }
-        public class profileomgss
-        {
-            public string _id { get; set; }
-            public string Update { get; set; }
-            public string Created { get; set; } = "2021-03-07T16:33:28.462Z";
-            public string updated { get; set; } = "2021-05-20T14:57:29.907Z";
-            public int rvn { get; set; } = 0;
-            public int wipeNumber { get; set; } = 1;
-            public string accountId { get; set; }
-            public string profileId { get; set; }
-            public string version { get; set; } = "no_version";
-            public Dictionary<string, object> items { get; set; }
-            public fdsfsdsddffsd stats { get; set; } = new fdsfsdsddffsd();
-            public int commandRevision { get; set; } = 5;
-        }
-        public class profileChanges23
-        {
-            public string changeType { get; set; }
 
-            public string _id { get; set; }
-            public profileomgss profile { get; set; }
-        }
-        public class BlankQueryProfileAthenaModels
-        {
-            public int profileRevision { get; set; } = 1;
-            public string profileId { get; set; } = profileIdOMG;
-            public int profileChangesBaseRevision { get; set; } = 1;
-            public List<object> profileChanges { get; set; }
-            public string serverTime { get; set; } = DateTime.Now.ToString("yyyy-MM-ddThh-mm-ssZ");
-            public int profileCommandRevision { get; set; } = 1;
-            public int responseVersion { get; set; } = 1;
-        }
-        public class QueryProfileAthenaModels
-        {
-            public int profileRevision { get; set; } = 1;
-            public string profileId { get; set; } = profileIdOMG;
-            public int profileChangesBaseRevision { get; set; } = 1;
-            public List<profileChanges23> profileChanges { get; set; } = new List<profileChanges23>();
-            public string serverTime { get; set; } = DateTime.Now.ToString("yyyy-MM-ddThh-mm-ssZ");
-            public int profileCommandRevision { get; set; } = 1;
-            public int responseVersion { get; set; } = 1;
-        }
-
- 
         [HttpPost("game/v2/profile/{AccountId}/client/QueryProfile")]
         [HttpPost("game/v2/profile/{AccountId}/client/SetMtxPlatform")]
         [HttpPost("game/v2/profile/{AccountId}/client/ClientQuestLogin")]
-        public ActionResult<QueryProfileAthenaModels> QueryProfile([FromQuery] string profileId)
+        public ActionResult<QueryProfileModels> QueryProfile([FromQuery] string profileId)
         {
             if (profileId == "athena")
             {
-               
+
                 profileIdOMG = profileId;
                 JArray values = JArray.Parse(System.IO.File.ReadAllText(Path.Combine(Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]), $"resources/json/athena.json")));
 
@@ -271,18 +179,18 @@ namespace CloudBackend.Workers
                         quantity = 1
                     });
                 }
-                return new QueryProfileAthenaModels()
+                return new QueryProfileModels()
                 {
                     profileRevision = Data.Saved.profilerevision,
                     profileChangesBaseRevision = Data.Saved.profilerevision,
                     profileCommandRevision = Data.Saved.profilerevision,
-                    profileChanges = new List<profileChanges23>()
+                    profileChanges = new List<profileChanges>()
                     {
-                        new profileChanges23()
+                        new profileChanges()
                         {
                             changeType = "fullProfileUpdate",
                             _id = "RANDOM",
-                            profile = new profileomgss()
+                            profile = new Profile()
                             {
                                _id = "RANDOM",
                                Update = "",
@@ -293,9 +201,9 @@ namespace CloudBackend.Workers
                                accountId = Data.Saved.AccountId,
                                profileId = profileIdOMG,
                                items = itemsFormatted,
-                               stats = new fdsfsdsddffsd()
+                               stats = new Stats()
                                {
-                                   attributes = new attributes69()
+                                   attributes = new Attributes()
                                    {
 
                                    }
@@ -309,48 +217,18 @@ namespace CloudBackend.Workers
             else
             {
                 profileIdOMG = profileId;
-                return new QueryProfileAthenaModels()
-                {
-                    profileChanges = new List<profileChanges23>()
-                    {
-                        
-                    }
-                };
+                return new QueryProfileModels();
             }
         }
 
         public static string profileChangesCodeName = "";
         public static string profileChangesCodeValue = "";
-        public class profileChangesCode
-        {
-            public string changeType { get; set; }
-            public string name { get; set; }
-            public string value { get; set; }
-        }
+    
 
-        public class EquipEpics
-        {
-            public int profileRevision { get; set; } = Data.Saved.profilerevision;
-            public string profileId { get; set; } = "athena";
-            public int profileChangesBaseRevision { get; set; } = Data.Saved.profilerevision;
-            public List<profileChangesCode> profileChanges { get; set; }
-            public int profileCommandRevision { get; set; } = Data.Saved.profilerevision;
-            public string serverTime { get; set; } = DateTime.Now.ToString("yyyy-MM-ddThh-mm-ssZ");
-            public int responseVersion { get; set; } = 2;
-        }
-
-        // THIS IS EPPIC
-        public class EquipBattleRoyaleCustomizationBody
-        {
-            public string slotName { get; set; }
-            public string itemToSlot { get; set; }
-            public int indexWithinSlot { get; set; }
-            public string category { get; set; }
-        }
 
         //http://localhost:6980/fortnite/api/game/v2/profile/ABCABC/client/EquipBattleRoyaleCustomization
         [HttpPost("game/v2/profile/{AccountId}/client/EquipBattleRoyaleCustomization")]
-        public ActionResult<EquipEpics> EquipBattleRoyaleCustomization([FromQuery] string profileId, [FromBody] EquipBattleRoyaleCustomizationBody body)
+        public ActionResult<EquipChanges> EquipBattleRoyaleCustomization([FromQuery] string profileId, [FromBody] EquipBattleRoyaleCustomizationBody body)
         {
             
             try
@@ -473,7 +351,7 @@ namespace CloudBackend.Workers
                 Console.WriteLine(Data.Saved.profilerevision);
                 Console.WriteLine(Data.Saved.favorite_character);
                 Console.WriteLine();
-                return new EquipEpics()
+                return new EquipChanges()
                 {
                     profileChanges = new List<profileChangesCode>()
                     {

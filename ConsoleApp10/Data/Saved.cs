@@ -59,4 +59,6 @@ namespace CloudBackend.Data
             ""
         };
     }
+
+    public class empty { } // blank duh
 }
